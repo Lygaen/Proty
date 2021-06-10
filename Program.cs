@@ -45,6 +45,7 @@ namespace Proty
 
             discord.Ready += Events.Ready;
             discord.MessageCreated += Events.MessageCreated;
+            discord.GuildCreated += Events.GuildCreated;
 
             await discord.ConnectAsync(new DiscordActivity()
             {

@@ -98,5 +98,18 @@ namespace Proty
             }
             await e.Context.Channel.SendMessageAsync(MessageUtils.BuildError($"Error was not handled !\n```{e.Exception}```"));
         }
+
+        public static async Task GuildCreated(DiscordClient sender, GuildCreateEventArgs e)
+        {
+            await Task.Run(async () =>
+            {
+                await Db.Instance.CreateDbGuild(new DbGuild()
+                {
+                    GuildId = e.Guild.Id,
+                    Prefix = "!",
+                    Premium = false
+                });
+            });
+        }
     }
 }
