@@ -59,7 +59,7 @@ namespace Proty.commands
             {
                 await ctx.Channel.DeleteMessagesAsync(await ctx.Channel.GetMessagesAsync(Math.Max(amount, 200)));
             }
-            catch (BadRequestException e)
+            catch (BadRequestException)
             {
                 await ctx.Channel.SendMessageAsync(MessageUtils.BuildError($"Couldn't delete all messages, some are older than 14 days (Discord limit when purging)."));
                 return;

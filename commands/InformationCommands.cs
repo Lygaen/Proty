@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
+using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -77,6 +79,27 @@ namespace Proty.commands
             embed.AddField("Library", $"This bot is made with the [Dsharp Plus](https://dsharpplus.github.io/) library");
             
             await ctx.Channel.SendMessageAsync(embed);
+        }
+
+        [Command("bug")]
+        [Description("Reports a bug to the dev !")]
+        [Aliases("issue", "issues", "bugs")]
+        public async Task Bug(CommandContext ctx, [Description("The bug explained in detail.")] [RemainingText] string bug)
+        {
+            var client = new DiscordWebhookClient();
+            var webhook = await client.AddWebhookAsync(new Uri("https://discord.com/api/webhooks/852610216922054716/-n7TPmqRYjY_iok0hyHte8AkK4luspZwAZcvunS9yHdzIiXrfEE6PdPou4ypRO_B03Kb"));
+            await new DiscordWebhookBuilder().AddEmbed(new DiscordEmbedBuilder()
+            {
+                Title = "🐛 Bug",
+                Description = string.Join(" ", bug),
+                Author = new DiscordEmbedBuilder.EmbedAuthor()
+                {
+                    IconUrl = ctx.User.AvatarUrl,
+                    Name = ctx.User.Username + "#" + ctx.User.Discriminator
+                },
+                Color = DiscordColor.Green
+            }).SendAsync(webhook);
+            await ctx.Channel.SendMessageAsync(MessageUtils.BuildSuccess("Sent the bug !\nAny abuse will be punished..."));
         }
 
     }
