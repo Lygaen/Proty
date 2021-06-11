@@ -54,18 +54,21 @@ namespace Proty.db
 
         public async Task CreateDbGuild(DbGuild guild)
         {
+            
+        }
+
+        public async Task RemoveDbGuild(ulong id)
+        {
             var con = (MySqlConnection) _baseConnection.Clone();
             await con.OpenAsync();
             var cmd = con.CreateCommand();
-            cmd.CommandText = "INSERT INTO Guilds(guildId, prefix, premium) VALUES (@Id, @Prefix, @Premium);";
-            cmd.Parameters.AddWithValue("Id", guild.GuildId);
-            cmd.Parameters.AddWithValue("Prefix", guild.Prefix);
-            cmd.Parameters.AddWithValue("Premium", guild.Premium);
+            cmd.CommandText = "DELETE FROM Guilds WHERE guildId=@Id;";
+            cmd.Parameters.AddWithValue("Id", id);
 
             await cmd.ExecuteNonQueryAsync();
-            DbGuild.GuildCache.AddToCache(guild);
+            DbGuild.GuildCache.RemoveCached(id);
         }
-
+        
         public async Task<long> GetPingAsync()
         {
             return (await new Ping().SendPingAsync(Ip, 1000)).RoundtripTime;

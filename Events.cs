@@ -111,5 +111,13 @@ namespace Proty
                 });
             });
         }
+
+        public static async Task GuildDeleted(DiscordClient sender, GuildDeleteEventArgs e)
+        {
+            await Task.Run(async () =>
+            {
+                await Db.Instance.RemoveDbGuild(e.Guild.Id);
+            });
+        }
     }
 }
